@@ -1,0 +1,6 @@
+# Archivos de configuración
+.env
+# Dependencias instaladas
+node_modules/
+# Archivos generados por la compilación
+dist/
