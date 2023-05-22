@@ -1,14 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
 require('dotenv').config();
+
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors()); 
 
 // Configura la conexión a la base de datos MySQL
 const connection = mysql.createConnection({
@@ -101,16 +99,7 @@ app.delete('/videos/:id', (req, res) => {
   });
 });
 
-// Configura el servidor HTTPS con el certificado autofirmado
-const options = {
-  key: fs.readFileSync(path.resolve(__dirname, './server.key')),
-  cert: fs.readFileSync(path.resolve(__dirname, './server.crt'))
-};
-
-const server = https.createServer(options, app);
-
-const port = 443; // Puerto para HTTPS
-
-server.listen(port, () => {
-  console.log(`Servidor HTTPS escuchando en el puerto ${port}`);
+// Inicia el servidor
+app.listen(3000, () => {
+  console.log('Servidor escuchando en el puerto 3000');
 });
