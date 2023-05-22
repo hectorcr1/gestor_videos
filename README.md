@@ -1,6 +1,6 @@
 # Aplicación Backend con Node.js, Express y MySQL
 
-Esta es una aplicación backend desarrollada con Node.js, Express y MySQL. Proporciona una API para gestionar datos relacionados con la app de gestion de videos de youtube contruida en vue https://github.com/hectorcr1/gestor_videos_vue
+Esta es una aplicación backend desarrollada con Node.js, Express y MySQL. Proporciona una API para manejar datos relacionados con la app de gestion de videos de youtube contruida en vue https://github.com/hectorcr1/gestor_videos_vue
 
 ## Características
 
