@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const mysql = require('mysql');
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
+app.use(cors()); 
 
 // Configura la conexión a la base de datos MySQL
 const connection = mysql.createConnection({
@@ -24,7 +26,7 @@ connection.connect((err) => {
 
 // Obtener todos los videos
 app.get('/videos', (req, res) => {
-  const sql = 'SELECT * FROM videos';
+  const sql = 'SELECT * FROM videos order by id desc';
   connection.query(sql, (err, results) => {
     if (err) {
       console.error('Error al obtener los videos:', err);
@@ -53,20 +55,33 @@ app.get('/videos/:id', (req, res) => {
   });
 });
 
-// Agregar un nuevo video
+// Agregar un nuevo video pero validar antes que no exista
 app.post('/videos', (req, res) => {
   const { url, title, description, duration, thumbnail } = req.body;
-  const sql = 'INSERT INTO videos (url, title, description, duration, thumbnail) VALUES (?, ?, ?, ?, ?)';
-  const values = [url, title, description, duration, thumbnail];
-  connection.query(sql, values, (err, results) => {
+  const sql = 'SELECT * FROM videos WHERE url = ?';
+  connection.query(sql, [url], (err, results) => {
     if (err) {
-      console.error('Error al agregar el video:', err);
-      res.status(500).json({ error: 'Error al agregar el video' });
+      console.error('Error al obtener el video:', err);
+      res.status(500).json({ error: 'Error al obtener el video' });
       return;
     }
-    res.status(201).json({ message: 'Video agregado exitosamente' });
+    if (results.length > 0) {
+      res.status(409).json({ error: 'El video ya existe' });
+      return;
+    }
+    const sql = 'INSERT INTO videos (url, title, description, duration, thumbnail) VALUES (?, ?, ?, ?, ?)';
+    const values = [url, title, description, duration, thumbnail];
+    connection.query(sql, values, (err, results) => {
+      if (err) {
+        console.error('Error al agregar el video:', err);
+        res.status(500).json({ error: 'Error al agregar el video' });
+        return;
+      }
+      res.status(201).json({ message: 'Video agregado exitosamente' });
+    });
   });
 });
+
 
 // Eliminar un video
 app.delete('/videos/:id', (req, res) => {
