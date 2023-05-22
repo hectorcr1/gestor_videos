@@ -103,8 +103,8 @@ app.delete('/videos/:id', (req, res) => {
 
 // Configura el servidor HTTPS con el certificado autofirmado
 const options = {
-  key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
-  cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
+  key: fs.readFileSync(path.resolve(__dirname, './server.key')),
+  cert: fs.readFileSync(path.resolve(__dirname, './server.crt'))
 };
 
 const server = https.createServer(options, app);
